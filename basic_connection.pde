@@ -2,7 +2,7 @@ import processing.serial.*;
 
 Serial myPort;  // Create object from Serial class
 static String val;    // Data received from the serial port
-static int MAX = 2;
+static int MAX = 10;
 static int RESET_FACTOR = 100;
 static float VARIANCE = 0.2;
 static float SHIFTT_FACTOR = 0.0000002;
@@ -46,9 +46,13 @@ float frequency(){
 }
 
 void touch(){
-  int green_= int(map(freq, 0, max_diff, 0, 255));
+  float n = 0;
+  if(freq > 0){
+    n = float(1/freq);
+  }
+  int green_= int(map(freq, 16, 800, 0, 255));
   if (push_x > THRESH && push_y > THRESH || push_z > THRESH){
-      fill(0, green_, 0);
+      fill(green_, 0, 0);
       ellipse(width/2, height/2, 40, 40);
       long current_time = System.currentTimeMillis();
       long diff = current_time - time;
@@ -98,10 +102,10 @@ boolean not_stady(int index){
 }
 
 boolean there_is_shift(){
-  print("cur avg ");
-  print(current_avg[0]);
-  print(",");
-  println(current_avg[1]);
+  //print("cur avg ");
+  //print(current_avg[0]);
+  //print(",");
+  //println(current_avg[1]);
   return abs(current_avg[0] - total_avg[0]) > SHIFTT_FACTOR && abs(current_avg[1] - total_avg[1]) > SHIFTT_FACTOR;
 }
 void draw()
